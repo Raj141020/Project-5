@@ -6,13 +6,26 @@ const userController = require('../controller/userController')
 
 const auth = require('../auth/auth')
 
+//USER//
+/*.........................//1// CREAT USER //..............................................*/
+
 router.post('/register', userController.creatUserData)
+
+/*.........................//2// LOGIN USER //..............................................*/
 
 router.post('/login', userController.loginUser)
 
+/*.........................//3// GET USER //..............................................*/
+
 router.get('/user/:userId/profile', auth.authenticate, userController.getUserData)
 
+/*.........................//4// EDIT USER //..............................................*/
+
 router.put("/user/:userId/profile", auth.authenticate, auth.authorisation, userController.updateProfile)
+
+//PRODUCT//
+/*.........................//5// CREAT PRODUCT //.............................................*/
+
 
 
 router.all('/*', (req, res) => {
