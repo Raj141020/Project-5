@@ -1,7 +1,8 @@
 const productModel = require("../model/productModel")
 const aws = require("../aws/aws")
+const moment = require('moment')
 
-const { isValidBody, isValidTitle, isValid, isValidPrice, isValidName, isValidNumbers, isValidFile } = require("../validation/validation")
+const { isValidBody, isValidTitle, isValid, isValidPrice, isValidName, isValidNumbers, isValidFile, isValidId } = require("../validation/validation")
 
 //--------------------------------------------- Create Product --------------------------------------------//
 
@@ -84,7 +85,7 @@ exports.createProduct = async function (req, res) {
     }
 
     if (!isValid(installments) || !isValidNumbers(installments)) {
-      return res.status(400).send({ status: false, message: "Installments' is invalid" });
+      return res.status(400).send({ status: false, message: "Installment is invalid" });
     }
 
     const productCreate = await productModel.create(data);
@@ -95,3 +96,62 @@ exports.createProduct = async function (req, res) {
   }
 }
 
+//--------------------------------------------- GET Product --------------------------------------------//
+
+
+
+
+//-------------------------------------- Get Product By Id --------------------------------------//
+
+
+exports.getProductById = async function (req, res) {
+
+    try {
+
+      let productId = req.params.productId;
+  
+      if (!isValidId(productId)) 
+        return res.status(400).send({ status: false, message: "ProductId is not valid" })
+      
+      let productData = await productModel.findOne({ _id: productId,isDeleted: false})
+      if (!productData) {
+        return res.status(404).send({ status: false, message: "Product not exist" })
+      }
+  
+      return res.status(200).send({ status: true, message: "Success", data: productData })
+    } 
+    
+    catch (err) {
+      return res.status(500).send({ satus: false, err: err.message });
+    }
+  }
+
+  //-------------------------------------- Delete Product --------------------------------------//
+
+exports.deleteProduct = async function (req, res) {
+
+    try {
+
+      let productId = req.params.productId
+  
+      if (!isValidId(productId)) {
+        return res.status(400).send({ status: false, message: "ProductId not valid" })
+      }
+  
+      let productData = await productModel.findOne({ _id: productId,isDeleted: false})
+      if (!productData) {
+        return res.status(404).send({ status: false, message: "Product not exist" })
+      }
+  
+      await productModel.updateOne(
+        { _id: productId },
+        { isDeleted: true, deletedAt:moment().format("dddd, MMMM Do YYYY, h:mm:ss") }
+      );
+  
+      return res.status(200).send({ status: true, message: "Product Successfully Deleted" })
+    } 
+    catch (err) {
+      return res.status(500).send({ satus: false, err: err.message })
+    }
+  }
+  

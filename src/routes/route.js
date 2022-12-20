@@ -28,7 +28,21 @@ router.put('/user/:userId/profile', auth.authenticate, auth.authorisation, userC
 //PRODUCT//
 /*.........................//5// CREAT PRODUCT //.............................................*/
 
-router.post("/products", productController.createProduct)
+router.post('/products', productController.createProduct)
+
+/*.........................//6// GET PRODUCT BY QUERY //.............................................*/
+
+
+/*.........................//7// GET PRODUCT BY ID //.............................................*/
+
+router.get('/products/:productId', productController.getProductById)
+
+/*.........................//8// EDIT PRODUCT //.............................................*/
+
+
+/*.........................//9// DELETE PRODUCT //.............................................*/
+
+router.delete('/products/:productId', productController.deleteProduct)
 
 
 router.all('/*', (req, res) => {

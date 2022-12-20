@@ -58,7 +58,8 @@ const productSchema = new mongoose.Schema(
     },
     
     deletedAt: {
-      type: Date,
+      type: String,
+      format: "date",
       default: null
     },
 
