@@ -35,7 +35,7 @@ const isValidPincode = function (pincode){
 const isValidEmail = function (mail) {
   if (/^\w+([\.-]?\w+)@\w+([\.-]?\w+)(\.\w{2,3})+$/.test(mail)) 
     return true
-};
+}
 
 const isValidFile = (img) => {
   const regex = /(\/*\.(?:png|gif|webp|jpeg|jpg))/.test(img)
@@ -43,9 +43,24 @@ const isValidFile = (img) => {
 }
 
 const isValidName = function (name) {
-  if (/^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$/.test(name)) return true;
-  return false;
-};
+  if (/^([a-zA-Z0-9]+\s)*[a-zA-Z0-9]+$/.test(name)) return true
+  return false
+}
 
+const isValidPrice = (value) => {
+  const regEx =/^[1-9]\d{0,8}(?:\.\d{1,2})?$/
+  const result = regEx.test(value)
+  return result
+}
 
-module.exports = { isValidBody, isValid, isValidPassword, isValidUserName, isValidMobileNumber, isValidId,isValidPincode, isValidEmail, isValidFile, isValidName }
+const isValidTitle = function (name) {
+  if (/^([a-zA-Z0-9:-]+\s)*[a-zA-Z0-9:-]+$/.test(name)) return true
+  return false
+}
+
+const isValidNumbers = function (value){
+  let user = /^[0-9]+$/.test(value)
+  return user
+}
+
+module.exports = { isValidBody, isValid, isValidPassword, isValidUserName, isValidMobileNumber, isValidId,isValidPincode, isValidEmail, isValidFile, isValidName, isValidPrice, isValidTitle, isValidNumbers }

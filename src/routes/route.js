@@ -4,6 +4,8 @@ const router = express.Router();
 
 const userController = require('../controller/userController')
 
+const productController = require('../controller/productController')
+
 const auth = require('../auth/auth')
 
 //USER//
@@ -21,11 +23,12 @@ router.get('/user/:userId/profile', auth.authenticate, userController.getUserDat
 
 /*.........................//4// EDIT USER //..............................................*/
 
-router.put("/user/:userId/profile", auth.authenticate, auth.authorisation, userController.updateProfile)
+router.put('/user/:userId/profile', auth.authenticate, auth.authorisation, userController.updateProfile)
 
 //PRODUCT//
 /*.........................//5// CREAT PRODUCT //.............................................*/
 
+router.post("/products", productController.createProduct)
 
 
 router.all('/*', (req, res) => {

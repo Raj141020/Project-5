@@ -1,9 +1,11 @@
-const userModel = require("../model/userModel");
-const bcrypt = require("bcrypt");
-const aws = require("../aws/aws");
-const jwt = require("jsonwebtoken");
+const userModel = require("../model/userModel")
+const bcrypt = require("bcrypt")
+const aws = require("../aws/aws")
+const jwt = require("jsonwebtoken")
 
-const { isValidBody, isValid, isValidPassword, isValidUserName, isValidMobileNumber, isValidName, isValidId, isValidPincode, isValidEmail, isValidFile } = require("../validation/validation");
+
+const { isValidBody, isValid, isValidPassword, isValidUserName, isValidMobileNumber, isValidName, isValidId, isValidPincode, isValidEmail, isValidFile } = require("../validation/validation")
+
 
 /* ------------------------------------------- Create User --------------------------------------------------- */
 
@@ -11,36 +13,36 @@ exports.creatUserData = async function (req, res) {
 
     try {
 
-      let data = req.body;
+      let data = req.body
   
-      const { fname, lname, email, phone, password} = data
+      const { fname, lname, email, phone, password } = data
        
       if (!isValidBody(data)) {
         return res.status(400).send({status: false,message: "Please provide data in body"})
       }
   
       if (!fname) {
-       return res.status(400).send({ status: false, message: "First Name is required" });
+       return res.status(400).send({ status: false, message: "First Name is required" })
       }
 
       if (!isValid(fname) || !isValidUserName(fname)) {
-        return res.status(400).send({ status: false, message: "First name is invalid" });
+        return res.status(400).send({ status: false, message: "First name is invalid" })
       }
   
       if (!lname){
-        return res.status(400).send({ status: false, message: "Last Name is required" });
+        return res.status(400).send({ status: false, message: "Last Name is required" })
         }
 
       if (!isValid(lname) || !isValidUserName(lname)) {
-        return res.status(400).send({ status: false, message: "Last name is invalid" });
+        return res.status(400).send({ status: false, message: "Last name is invalid" })
       }
   
       if (!email) {
-        return res.status(400).send({ status: false, message: "Email is required" });
+        return res.status(400).send({ status: false, message: "Email is required" })
       }
 
       if (!isValidEmail(email)) {
-        return res.status(400).send({ status: false, message: "Email is invalid" });
+        return res.status(400).send({ status: false, message: "Email is invalid" })
       }
 
       let userEmail = await userModel.findOne({ email: email })
@@ -76,7 +78,7 @@ exports.creatUserData = async function (req, res) {
       let address = data.address
 
       if (!address){
-        return res.status(400).send({ status: false, message: "Address is required" });
+        return res.status(400).send({ status: false, message: "Address is required" })
         }
         
         address=JSON.parse(address)
@@ -86,7 +88,7 @@ exports.creatUserData = async function (req, res) {
       }
         
       if (!isValidName(address.shipping.street)) {
-        return res.status(400).send({ status: false, message: "Invalid shipping street" });
+        return res.status(400).send({ status: false, message: "Invalid shipping street" })
       }
   
       if (!address.shipping.city){
@@ -94,7 +96,7 @@ exports.creatUserData = async function (req, res) {
       }
         
       if (!isValidName(address.shipping.city)) {
-        return res.status(400).send({ status: false, message: "Invalid shipping city!" });
+        return res.status(400).send({ status: false, message: "Invalid shipping city!" })
       }
   
       if (!address.shipping.pincode){
@@ -102,15 +104,15 @@ exports.creatUserData = async function (req, res) {
       }
 
       if (!isValidPincode(address.shipping.pincode)) {
-        return res.status(400).send({ status: false, message: "Invalid shipping pincode!" });
+        return res.status(400).send({ status: false, message: "Invalid shipping pincode!" })
       }
   
       if (!address.billing.street){
-        return res.status(400).send({ status: false, message: "Billing Street is required!" });
+        return res.status(400).send({ status: false, message: "Billing Street is required!" })
       }
         
       if (!isValidName(address.billing.street)) {
-        return res.status(400).send({ status: false, message: "Invalid billing street!" });
+        return res.status(400).send({ status: false, message: "Invalid billing street!" })
       }
   
       if (!address.billing.city){
@@ -118,7 +120,7 @@ exports.creatUserData = async function (req, res) {
       }
 
       if (!isValidName(address.billing.city)) {
-        return res.status(400).send({ status: false, message: "Invalid billing city!" });
+        return res.status(400).send({ status: false, message: "Invalid billing city!" })
       }
   
       if (!address.billing.pincode){
@@ -126,7 +128,7 @@ exports.creatUserData = async function (req, res) {
       }
 
       if (!isValidPincode(address.billing.pincode)) {
-        return res.status(400).send({ status: false, message: "Invalid billing pincode!" });
+        return res.status(400).send({ status: false, message: "Invalid billing pincode!" })
       }
  
 
@@ -138,14 +140,14 @@ exports.creatUserData = async function (req, res) {
 
         if (!isValidFile(files[0].originalname)){
 
-          return res.status(400).send({ status: false, message: `Enter format jpeg/jpg/png only.` });
+          return res.status(400).send({ status: false, message: `Enter format jpeg/jpg/png only.` })
           }
 
         let uploadedFileURL = await aws.uploadFile(files[0])
         data.profileImage = uploadedFileURL
       } 
       else {
-        return res.status(400).send({ message: "Files are required!" });
+        return res.status(400).send({ message: "Files are required!" })
       }
 
   /* -------------------------------------------------------------------------------------------------------- */
@@ -278,7 +280,7 @@ exports.updateProfile = async function (req, res) {
       if (!isValid(lname) || !isValidUserName(lname)) {
         return res.status(400).send({ status: false, message: "lname is invalid" })
       }
-      update["lname"] = lname;
+      update["lname"] = lname; 
     }
 
     if (email) {
@@ -333,14 +335,14 @@ exports.updateProfile = async function (req, res) {
           if (!isValidName(address.shipping.city)) {
             return res.status(400).send({ status: false, message: "Invalid shipping city" })
           }
-          update["address.shipping.city"] = city;
+          update["address.shipping.city"] = city
         }
 
         if (pincode) {
           if (!isValidPincode(address.shipping.pincode)) {
             return res.status(400).send({ status: false, message: "Invalid shipping pincode" })
           }
-          update["address.shipping.pincode"] = pincode;
+          update["address.shipping.pincode"] = pincode
         }
       }
 
@@ -351,7 +353,7 @@ exports.updateProfile = async function (req, res) {
           if (!isValidName(address.billing.street)) {
             return res.status(400).send({ status: false, message: "Invalid billing street" })
           }
-          update["address.billing.street"] = street;
+          update["address.billing.street"] = street
         }
 
         if (city) {
