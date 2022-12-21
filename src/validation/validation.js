@@ -63,4 +63,11 @@ const isValidNumbers = function (value){
   return user
 }
 
-module.exports = { isValidBody, isValid, isValidPassword, isValidUserName, isValidMobileNumber, isValidId,isValidPincode, isValidEmail, isValidFile, isValidName, isValidPrice, isValidTitle, isValidNumbers }
+const isValidAvailableSizes = (availablesizes) => {
+  for( i=0 ;i<availablesizes.length; i++){
+    if(!["S", "XS","M","X", "L","XXL", "XL"].includes(availablesizes[i])) return false
+  }
+  return true
+}
+
+module.exports = { isValidBody, isValid, isValidPassword, isValidUserName, isValidMobileNumber, isValidId,isValidPincode, isValidEmail, isValidFile, isValidName, isValidPrice, isValidTitle, isValidNumbers, isValidAvailableSizes }

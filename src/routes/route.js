@@ -25,6 +25,7 @@ router.get('/user/:userId/profile', auth.authenticate, userController.getUserDat
 
 router.put('/user/:userId/profile', auth.authenticate, auth.authorisation, userController.updateProfile)
 
+
 //PRODUCT//
 /*.........................//5// CREAT PRODUCT //.............................................*/
 
@@ -32,6 +33,7 @@ router.post('/products', productController.createProduct)
 
 /*.........................//6// GET PRODUCT BY QUERY //.............................................*/
 
+router.get('/products', productController.getProduct)
 
 /*.........................//7// GET PRODUCT BY ID //.............................................*/
 
@@ -39,6 +41,7 @@ router.get('/products/:productId', productController.getProductById)
 
 /*.........................//8// EDIT PRODUCT //.............................................*/
 
+router.put("/products/:productId", productController.updateProduct)
 
 /*.........................//9// DELETE PRODUCT //.............................................*/
 
@@ -50,4 +53,4 @@ router.all('/*', (req, res) => {
 })
 
 
-module.exports = router;
+module.exports = router

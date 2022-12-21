@@ -200,7 +200,7 @@ exports.loginUser = async function (req, res) {
         let token = jwt.sign(
           { _id: checkEmail._id.toString() },
           "Group-20",
-          { expiresIn: "10m"}
+          { expiresIn: "30m"}
         )
          console.log(token)
         return res.status(201).send({status: true,message: "User login successfull",data: { userId: checkEmail._id, token: token }})
@@ -263,27 +263,27 @@ exports.updateProfile = async function (req, res) {
     const files = req.files
     const update = {}
 
-    const { fname, lname, email, phone, password, address } = data
+    const { fname, lname, email, phone, password } = data
 
     if (!isValidBody(data) && !files) {
       return res.status(400).send({status: false,message: "Please provide data in body"})
     }
 
-    if (fname) {
+    if (fname || fname == '') {
       if (!isValid(fname) || !isValidUserName(fname)) {
         return res.status(400).send({ status: false, message: "fname is invalid" })
       }
       update["fname"] = fname
     }
 
-    if (lname) {
+    if (lname || lname == '') {
       if (!isValid(lname) || !isValidUserName(lname)) {
         return res.status(400).send({ status: false, message: "lname is invalid" })
       }
       update["lname"] = lname; 
     }
 
-    if (email) {
+    if (email || email == '') {
       if (!isValidEmail(email)) {
         return res.status(400).send({ status: false, message: "Email is invalid" })
       }
@@ -295,7 +295,7 @@ exports.updateProfile = async function (req, res) {
       update["email"] = email;
     }
 
-    if (phone) {
+    if (phone || phone == '') {
       if (!isValidMobileNumber(phone)) {return res.status(400).send({ status: false, message: "Phone is invalid" })
       }
 
@@ -306,7 +306,7 @@ exports.updateProfile = async function (req, res) {
       update["phone"] = phone
     }
 
-    if (password ) {
+    if (password || password == '') {
       if (!isValidPassword(password)) {
         return res.status(400).send({status: false,message:"Password should be of 8 to 15 characters and it should contain one Uppercase, one lower case, Number and special character, Ex - Abhishek@12345,Qwe#121"})
       }
@@ -318,27 +318,32 @@ exports.updateProfile = async function (req, res) {
       update["password"] = encryptPassword
     }
 
-    if (address) {
-      const { shipping, billing } = address
+    let address = data.address
 
-      if (shipping) {
-        const { street, city, pincode } = shipping
+    if (address || address == '') {
 
-        if (street) {
+      address=JSON.parse(address)
+
+      let { shipping, billing } = address
+
+      if (shipping || shipping == '') {
+        let { street, city, pincode } = shipping
+
+        if (street || street =='') {
           if (!isValidName(address.shipping.street)) {
             return res.status(400).send({ status: false, message: "Invalid shipping street" })
           }
           update["address.shipping.street"] = street
         }
 
-        if (city) {
+        if (city || city == '') {
           if (!isValidName(address.shipping.city)) {
             return res.status(400).send({ status: false, message: "Invalid shipping city" })
           }
           update["address.shipping.city"] = city
         }
 
-        if (pincode) {
+        if (pincode || pincode == '') {
           if (!isValidPincode(address.shipping.pincode)) {
             return res.status(400).send({ status: false, message: "Invalid shipping pincode" })
           }
@@ -346,31 +351,34 @@ exports.updateProfile = async function (req, res) {
         }
       }
 
-      if (billing) {
-        const { street, city, pincode } = billing;
+      if (billing || billing == '') {
+        let { street, city, pincode } = billing;
 
-        if (street) {
+        if (street || street == '') {
           if (!isValidName(address.billing.street)) {
             return res.status(400).send({ status: false, message: "Invalid billing street" })
           }
           update["address.billing.street"] = street
         }
 
-        if (city) {
+        if (city || city == '') {
           if (!isValidName(address.billing.city)) {
             return res.status(400).send({ status: false, message: "Invalid billing city" })
           }
           update["address.billing.city"] = city
         }
 
-        if (pincode) {
+        if (pincode || pincode == '') {
           if (!isValidPincode(address.billing.pincode)) {
             return res.status(400).send({ status: false, message: "Invalid billing pincode" })
           }
           update["address.billing.pincode"] = pincode
         }
       }
+
+      console.log(address)
     }
+    
 
     if (files && files.length > 0) {
 
@@ -389,7 +397,7 @@ exports.updateProfile = async function (req, res) {
 
     const updateUser = await userModel.findOneAndUpdate(
       { _id: userId },
-      update,
+      {$set:update},
       { new: true }
     )
 
