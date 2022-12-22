@@ -27,7 +27,7 @@ const authenticate = function (req, res, next) {
       }
 
       req["decodedtoken"] = decodedtoken
-
+      console.log(decodedtoken)
       next()
 
     })
