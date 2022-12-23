@@ -16,7 +16,7 @@ exports.createOrder = async function (req, res) {
       let cartId = data.cartId
   
       if (!isValidBody(data))
-        return res.status(400).send({status: false,message: "Please provide data body"})
+        return res.status(400).send({status: false,message: "Please provide data in body"})
   
       if (!isValidId(userId))
         return res.status(400).send({ status: false, message: "Please provide valid User Id" })
@@ -77,7 +77,7 @@ exports.createOrder = async function (req, res) {
   }
 
   //------------------------------------------- Edit Order --------------------------------------------//
-  
+
 
   exports.updateOrder = async function (req, res) {
 
@@ -100,17 +100,31 @@ exports.createOrder = async function (req, res) {
       if (!["pending", "completed", "cancelled"].includes(status)) {
         return res.status(400).send({status: false, message: "status should be pending, completed and cancelled only"})
       }
+
+      if (orderDetails.status === "pending") {
+        if(status === "pending"){
+          return res.status(400).send({status: false,message: "Order is already in pending stage"})
+        }
+    }
   
       if (orderDetails.status === "completed") {
-        return res.status(400).send({status: false,message: "Order completed"})
+          if(data.status === "pending"){
+            return res.status(400).send({status: false,message: "Order completed cannnot set status to Pending stage"})
+          }
+          if(status === "completed"){
+            return res.status(400).send({status: false,message: "Order is already in Completed stage"})
+          }
       }
   
-      if (orderDetails.cancellable === false && status == "cancelled") {
+      if (orderDetails.cancellable === false && orderDetails.status == "cancelled") {
         return res.status(400).send({ status: false, message: "Order is not cancellable" })
       } else {
         if (status === "pending") {
-          return res.status(400).send({ status: false, message: "order status is already pending" })
+          return res.status(400).send({ status: false, message: "Order cancelled cannnot set status to Pending stage" })
         }
+        if(orderDetails.status === "cancelled" && status === "cancelled"){
+            return res.status(400).send({status: false,message: "Order is already in cancelled stage"})
+          }
   
         let orderStatus = await orderModel.findOneAndUpdate(
           { _id: orderId },

@@ -44,15 +44,17 @@ exports.createCart = async function (req, res) {
       return res.status(404).send({ status: false, message: `Product with this Id ${productId} doesn't exist` })
     }
 
+    if(!quantity){
+      quantity=1
+   }
+
+    quantity = JSON.parse(quantity)
+
     if (quantity || quantity == '' ) {
       if (!isValidNumbers(quantity)) {
           return res.status(400).send({ status: false, message: "Quantity is not Valid" })
       }
   }
-
-     if(!quantity){
-        quantity=1
-     }
 
     if (cartId || cartId == '') {
       if (!isValidId(cartId)) {
@@ -79,7 +81,7 @@ exports.createCart = async function (req, res) {
         return res.status(400).send({ status: false, message: "Please provide cart id to add items in the cart" })
     }
     if (findUserCart._id.toString() !== cartId) {
-        return res.status(400).send({ status: false, message: "Cart id is not Match" })
+        return res.status(400).send({ status: false, message: "Cart id is not matching" })
     }
 
       let price = findUserCart.totalPrice + quantity * findProduct.price 
@@ -186,13 +188,17 @@ exports.updateCart = async function (req, res) {
   
       if (!(removeProduct === 0 || removeProduct === 1))
         return res.status(400).send({status: false,message: "Please enter valid value it can be only  0 or 1"})
+
+        if(findCart.userId != userId){
+          return res.status(400).send({status: false,message: "Please Provide user cartId"})
+        }
+
   
       let cart = findCart.items
       for (let i = 0; i < cart.length; i++) {
         if (cart[i].productId == productId) {
           const priceChange = cart[i].quantity * findProduct.price
 
-  
           //------------------------When removeProduct is 0--------------------------//
   
           if (removeProduct == 0) {
@@ -240,8 +246,13 @@ exports.updateCart = async function (req, res) {
 
             return res.status(200).send({status: true,message: "Success",data: updatedCart})
           
+        } 
+        if(cart[i].productId !== productId){
+          return res.status(400).send({status: false,message: "This Product is not present your cart"})
         }
-      }
+        
+      } 
+      
 
     } 
     catch (error) {
