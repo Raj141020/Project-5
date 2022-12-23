@@ -7,7 +7,8 @@ const productModel = require("../model/productModel")
 
 const {isValid, isValidId, isValidNumbers, isValidBody } = require("../validation/validation")
 
-//--------------------------------------------- Create Cart --------------------------------------------//
+
+//------------------------------------------- Create Cart --------------------------------------------//
 
 exports.createCart = async function (req, res) {
 
@@ -130,7 +131,7 @@ exports.createCart = async function (req, res) {
   }
 }
 
-//--------------------------------------------- Update Product --------------------------------------------//
+//--------------------------------------------- Update Cart --------------------------------------------//
 
 exports.updateCart = async function (req, res) {
 
@@ -184,7 +185,7 @@ exports.updateCart = async function (req, res) {
         return res.status(400).send({ status: false, message: "removeProduct is required" })
   
       if (!(removeProduct === 0 || removeProduct === 1))
-        return res.status(400).send({status: false,message: "Please enter valid removeproduct it can be only  `0` or `1`"})
+        return res.status(400).send({status: false,message: "Please enter valid value it can be only  0 or 1"})
   
       let cart = findCart.items
       for (let i = 0; i < cart.length; i++) {
@@ -270,7 +271,7 @@ exports.updateCart = async function (req, res) {
     }
   }
 
-  //--------------------------------------------- Delete Cart --------------------------------------------//
+  //------------------------------------------- Delete Cart --------------------------------------------//
 
   exports.deleteCart = async function (req, res) {
     try {

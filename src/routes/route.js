@@ -8,6 +8,8 @@ const productController = require('../controller/productController')
 
 const cartController = require('../controller/cartController')
 
+const orderController = require('../controller/orderController')
+
 const auth = require('../auth/auth')
 
 //USER//
@@ -49,6 +51,7 @@ router.put("/products/:productId", productController.updateProduct)
 
 router.delete('/products/:productId', productController.deleteProduct)
 
+
 //CART//
 /*.........................//10// CREATE CART //.............................................*/
 
@@ -66,6 +69,18 @@ router.get("/users/:userId/cart", auth.authenticate, auth.authorisation, cartCon
 
 router.delete("/users/:userId/cart", auth.authenticate, auth.authorisation, cartController.deleteCart)
 
+
+//ORDER//
+/*.........................//14// CREATE ORDER //.............................................*/
+
+router.post("/users/:userId/orders",  auth.authenticate, auth.authorisation, orderController.createOrder )
+
+/*.........................//15// EDIT ORDER //.............................................*/
+
+router.put("/users/:userId/orders", auth.authenticate, auth.authorisation, orderController.updateOrder )
+
+
+/*................................. VALIDATING END POINT/PATH .............................*/
 
 router.all('/*', (req, res) => {
     return res.status(400).send({ status: false, message: "Please provide correct path!" })

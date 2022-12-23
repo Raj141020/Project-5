@@ -11,6 +11,8 @@ const authenticate = function (req, res, next) {
 
     let token = req.headers["authorization"]
 
+    console.log(token)
+
     if (!token)
       return res.status(400).send({ status: false, message: "token is required" })
 
