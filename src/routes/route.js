@@ -23,7 +23,7 @@ router.post('/login', userController.loginUser)
 
 /*.........................//3// GET USER //..............................................*/
 
-router.get('/user/:userId/profile', auth.authenticate, userController.getUserData)
+router.get('/user/:userId/profile', auth.authenticate, auth.authorisation,userController.getUserData)
 
 /*.........................//4// EDIT USER //..............................................*/
 

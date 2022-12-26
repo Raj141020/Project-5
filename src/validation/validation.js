@@ -15,7 +15,7 @@ const isValidPassword = function (password) {
 }
 
 const isValidUserName = function (name) {
-  if (/^([a-zA-Z]+\s)*[a-zA-Z]+.{2,15}$/.test(name)) return true;
+  if (/^([a-zA-Z]+\s)*[a-zA-Z]+$/.test(name)) return true;
   return false;
 }
 

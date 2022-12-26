@@ -68,7 +68,7 @@ exports.creatUserData = async function (req, res) {
       }
 
       if (!isValidPassword(password)) {
-        return res.status(400).send({status: false,message:"Password should be of 8 to 15 characters and it should contain one Uppercase, one lower case, Number and special character, Ex - Abhishek@12345,Qwe#121"})
+        return res.status(400).send({status: false,message:"Password should be of 8 to 15 characters and it should contain one Uppercase, one lower case and Number Ex - AbhisheK12345,Qwe#121"})
       }
 
       const salt = await bcrypt.genSalt(10);
@@ -82,6 +82,10 @@ exports.creatUserData = async function (req, res) {
         }
         
         address=JSON.parse(address)
+
+        if(!address.shipping){
+          return res.status(400).send({ status: false, message: "Shipping is required!" })
+        }
   
       if (!address.shipping.street){
         return res.status(400).send({ status: false, message: "Shipping Street is required!" })
@@ -105,6 +109,10 @@ exports.creatUserData = async function (req, res) {
 
       if (!isValidPincode(address.shipping.pincode)) {
         return res.status(400).send({ status: false, message: "Invalid shipping pincode!" })
+      }
+
+      if(!address.billing){
+        return res.status(400).send({ status: false, message: "Billing is required!" })
       }
   
       if (!address.billing.street){
@@ -182,7 +190,7 @@ exports.loginUser = async function (req, res) {
     }
 
     if (!isValidPassword(password)) {
-      return res.status(400).send({status: false,message:"Password should be of 8 to 15 characters and it should contain one Uppercase, one lower case, Number and special character, Ex - Abhishek@12345,Qwe#121"})
+      return res.status(400).send({status: false,message:"Password should be of 8 to 15 characters and it should contain one Uppercase, one lower case and Number Ex - AbhisheK12345,Qwe#121"})
     }
 
     let checkEmail = await userModel.findOne({ email: email })

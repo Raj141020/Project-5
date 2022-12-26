@@ -82,7 +82,8 @@ exports.createOrder = async function (req, res) {
   exports.updateOrder = async function (req, res) {
 
     try {
-  
+
+      let userId = req.params.userId
       let data = req.body
       let { status, orderId } = data
 
@@ -93,6 +94,13 @@ exports.createOrder = async function (req, res) {
         return res.status(400).send({ status: false, message: "Invalid orderId" })
   
       let orderDetails = await orderModel.findOne({_id: orderId, isDeleted: false})
+
+      if(!orderDetails){
+        return res.status(404).send({status: false, message: "This order is not present"})
+      }
+
+      if(orderDetails.userId.toString() !== userId)
+         return res.status(403).send({status: false, message: "You are not authorised to perform this task"})
 
       if(!status)
         return res.status(400).send({status: false,message: "Please provide status"})
@@ -116,14 +124,14 @@ exports.createOrder = async function (req, res) {
           }
       }
   
-      if (orderDetails.cancellable === false && orderDetails.status == "cancelled") {
+      if (orderDetails.cancellable === false) {
         return res.status(400).send({ status: false, message: "Order is not cancellable" })
       } else {
         if (status === "pending") {
           return res.status(400).send({ status: false, message: "Order cancelled cannnot set status to Pending stage" })
         }
-        if(orderDetails.status === "cancelled" && status === "cancelled"){
-            return res.status(400).send({status: false,message: "Order is already in cancelled stage"})
+        if(orderDetails.status === "cancelled" && (status === "cancelled" || status == "completed")){
+            return res.status(400).send({status: false,message: "Order is cancelled"})
           }
   
         let orderStatus = await orderModel.findOneAndUpdate(

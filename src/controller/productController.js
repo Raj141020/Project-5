@@ -17,7 +17,7 @@ exports.createProduct = async function (req, res) {
       return res.status(400).send({status: false,message: "Please provide data in body"})
     }
 
-    if (!title)
+    if (!title) 
       return res.status(400).send({ status: false, message: "Title is required" })
 
     if (!isValidTitle(title)) {
@@ -80,6 +80,7 @@ exports.createProduct = async function (req, res) {
       return res.status(400).send({ status: false, msg: "Style is invalid" });
     }
 
+
     if (availableSizes) {
       availableSizes = availableSizes.split(",").map((x) => x.trim())
       data.availableSizes = availableSizes
@@ -88,8 +89,10 @@ exports.createProduct = async function (req, res) {
         return res.status(400).send({status: false,message: "Available sizes are XS,S,M,L,X,XXL,XL, please enter available size"})
     }
 
-    if (!isValid(installments) || !isValidNumbers(installments)) {
-      return res.status(400).send({ status: false, message: "Installment is invalid" });
+    if(installments || installments == ''){
+      if (!isValid(installments) || !isValidNumbers(installments)) {
+        return res.status(400).send({ status: false, message: "Installment is invalid" });
+      }
     }
 
     const productCreate = await productModel.create(data);
@@ -129,7 +132,7 @@ exports.getProduct = async function (req, res) {
 
       if (!isValidTitle(name))
         return res.status(400).send({ stastus: false, message: "Invalid naming format!" })
-      let productByname = new RegExp(name, "g")
+      let productByname = new RegExp(name, "g") 
 
       filter["title"] = productByname
     }
@@ -151,7 +154,7 @@ exports.getProduct = async function (req, res) {
     if ( priceGreaterThan && priceLessThan ) {
 
       if ( priceGreaterThan == priceLessThan ) {
-        filter["price"] = { $eq: priceGreaterThan  }
+        filter["price"] = { $eq: priceGreaterThan }
       } else {
         filter["price"] = { $gt: priceGreaterThan, $lt: priceLessThan }
       }
@@ -243,7 +246,7 @@ exports.getProductById = async function (req, res) {
       
         const uniquetitle = await productModel.findOne({ title: title });
         if (uniquetitle) {
-          return res.status(409).send({ status: false, message: "title is already present" })
+          return res.status(400).send({ status: false, message: "title is already present" })
         }
         update["title"] = title
       }

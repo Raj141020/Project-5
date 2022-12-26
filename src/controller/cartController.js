@@ -195,7 +195,14 @@ exports.updateCart = async function (req, res) {
 
   
       let cart = findCart.items
+
+      let items = cart.filter( (product) => product["productId"].toString() === productId )
+  
+      if (items.length == 0)
+        return res.status(400).send({status: false,message: "This product is not present in your cart"})
+
       for (let i = 0; i < cart.length; i++) {
+        
         if (cart[i].productId == productId) {
           const priceChange = cart[i].quantity * findProduct.price
 
@@ -247,9 +254,7 @@ exports.updateCart = async function (req, res) {
             return res.status(200).send({status: true,message: "Success",data: updatedCart})
           
         } 
-        if(cart[i].productId !== productId){
-          return res.status(400).send({status: false,message: "This Product is not present your cart"})
-        }
+        
         
       } 
       
