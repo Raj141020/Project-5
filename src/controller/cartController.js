@@ -80,11 +80,12 @@ exports.createCart = async function (req, res) {
       if (!cartId) {
         return res.status(400).send({ status: false, message: "Please provide cart id to add items in the cart" })
     }
+
     if (findUserCart._id.toString() !== cartId) {
         return res.status(400).send({ status: false, message: "Cart id is not matching" })
     }
 
-      let price = findUserCart.totalPrice + quantity * findProduct.price 
+      let price = (findUserCart.totalPrice + quantity * findProduct.price ).toFixed(2)
       console.log(price)
 
       let arr = findUserCart.items

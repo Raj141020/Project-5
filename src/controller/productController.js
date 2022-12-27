@@ -132,7 +132,7 @@ exports.getProduct = async function (req, res) {
 
       if (!isValidTitle(name))
         return res.status(400).send({ stastus: false, message: "Invalid naming format!" })
-      let productByname = new RegExp(name, "g") 
+      let productByname = new RegExp(name, "g") //{ $regex : name} 
 
       filter["title"] = productByname
     }

@@ -16,6 +16,7 @@ exports.creatUserData = async function (req, res) {
       let data = req.body
   
       const { fname, lname, email, phone, password } = data
+
        
       if (!isValidBody(data)) {
         return res.status(400).send({status: false,message: "Please provide data in body"})
@@ -72,8 +73,10 @@ exports.creatUserData = async function (req, res) {
       }
 
       const salt = await bcrypt.genSalt(10);
+      // console.log(salt)
 
       data.password = await bcrypt.hash(data.password, salt);
+      // console.log(data.password)
 
       let address = data.address
 
@@ -152,6 +155,8 @@ exports.creatUserData = async function (req, res) {
           }
 
         let uploadedFileURL = await aws.uploadFile(files[0])
+        // console.log(files[0])
+        // console.log(files[0].originalname)
         data.profileImage = uploadedFileURL
       } 
       else {
@@ -281,7 +286,7 @@ exports.updateProfile = async function (req, res) {
       if (!isValid(fname) || !isValidUserName(fname)) {
         return res.status(400).send({ status: false, message: "fname is invalid" })
       }
-      update["fname"] = fname
+      update["fname"] = fname 
     }
 
     if (lname || lname == '') {
@@ -316,7 +321,7 @@ exports.updateProfile = async function (req, res) {
 
     if (password || password == '') {
       if (!isValidPassword(password)) {
-        return res.status(400).send({status: false,message:"Password should be of 8 to 15 characters and it should contain one Uppercase, one lower case, Number and special character, Ex - Abhishek@12345,Qwe#121"})
+        return res.status(400).send({status: false,message:"Password should be of 8 to 15 characters and it should contain one Uppercase, one lower case, and Number, Ex - Abhishek@12345,Qwe#121"})
       }
 
       const salt = await bcrypt.genSalt(10)
@@ -395,6 +400,7 @@ exports.updateProfile = async function (req, res) {
       }
 
       let uploadedFileURL = await aws.uploadFile(files[0])
+      console.log(uploadedFileURL)
 
       update["profileImage"] = uploadedFileURL
     }

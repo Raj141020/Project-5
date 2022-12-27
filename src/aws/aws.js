@@ -18,14 +18,15 @@ exports.uploadFile = async (file) => {
             Key: "project-5(group-20)/" + file.originalname,
             Body: file.buffer
         }
+        console.log(uploadParams.Body)
 
         s3.upload(uploadParams, function (err, data) {
             if (err) {
                 return reject({ "error": err })
             }
-            console.log(data)
+            // console.log(data)
             console.log("file uploaded succesfully")
-            return resolve(data.Location)
+            // return resolve(data.Location)
         })
     })
 }
