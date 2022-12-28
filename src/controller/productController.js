@@ -120,6 +120,8 @@ exports.getProduct = async function (req, res) {
 
     const filter = {}
 
+    filter["isDeleted"] = false
+
     if (size || size =='') {
       let newsize = size.split(",").map((x) => x.trim())
       if (!isValidAvailableSizes(newsize))
@@ -179,6 +181,8 @@ exports.getProduct = async function (req, res) {
       }
       return res.status(400).send({status:false, message: "Please Provide correct data, you can enter only 1 or -1"})
     }
+
+   
 
     const finaldata = await productModel.find(filter)
 

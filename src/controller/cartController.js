@@ -205,7 +205,7 @@ exports.updateCart = async function (req, res) {
       for (let i = 0; i < cart.length; i++) {
         
         if (cart[i].productId == productId) {
-          const priceChange = cart[i].quantity * findProduct.price
+          const priceChange = (cart[i].quantity * findProduct.price).toFixed(2)
 
           //------------------------When removeProduct is 0--------------------------//
   
@@ -247,7 +247,7 @@ exports.updateCart = async function (req, res) {
               { _id: cartId },
               {
                 items: cart,
-                totalPrice: findCart.totalPrice - findProduct.price,
+                totalPrice: (findCart.totalPrice - findProduct.price).toFixed(2),
               },
               { new: true }
             )

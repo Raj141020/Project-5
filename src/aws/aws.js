@@ -26,7 +26,7 @@ exports.uploadFile = async (file) => {
             }
             // console.log(data)
             console.log("file uploaded succesfully")
-            // return resolve(data.Location)
+              return resolve(data.Location)
         })
     })
 }
